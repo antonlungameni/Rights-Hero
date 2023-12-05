@@ -67,8 +67,7 @@ Welcome to your Namibian Legal Assistant.
 
 
 @code {
-    private string question;
-    private string answer;
+    private string question = string.Empty;
     private bool isLoading;
 
     private List<Data.Message> messages = new List<Data.Message>();
@@ -77,7 +76,12 @@ Welcome to your Namibian Legal Assistant.
     {
         // Call the AI chatbot service to get the answer
         isLoading = true;
-        answer = await ChatService.Chat(messages, question);
+        if (string.IsNullOrEmpty(question))
+        {
+            isLoading = false;
+            return;
+        }
+        var answer = await ChatService.Chat(messages, question);
         messages.Add(new Data.Message("user", question));
         messages.Add(new Data.Message("assistant", answer));
 
@@ -86,7 +90,7 @@ Welcome to your Namibian Legal Assistant.
 
     }
 
-    private async Task Clear()
+    private void Clear()
     {
         messages.Clear();
     }

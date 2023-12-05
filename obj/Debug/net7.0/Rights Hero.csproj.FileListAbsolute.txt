@@ -35,3 +35,4 @@ C:\Projects\Hackathon\Rights Hero\bin\Debug\net7.0\Microsoft.Bcl.AsyncInterfaces
 C:\Projects\Hackathon\Rights Hero\bin\Debug\net7.0\System.Memory.Data.dll
 C:\Projects\Hackathon\Rights Hero\obj\Debug\net7.0\Rights Hero.csproj.AssemblyReference.cache
 C:\Projects\Hackathon\Rights Hero\obj\Debug\net7.0\Rights Hero.csproj.CopyComplete
+C:\Projects\Hackathon\Rights Hero\obj\Debug\net7.0\Rights Hero.sourcelink.json

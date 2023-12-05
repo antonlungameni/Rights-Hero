@@ -10,7 +10,6 @@ public class OpenAIService : IOpenAIService
     private AzureKeyCredential token;
     private OpenAIClient openAIClient;
     private ChatCompletionsOptions completionOptions;
-    private ChatMessage systemPrompt;
     public OpenAIService(IConfiguration configuration)
     {
         Configuration = configuration;
@@ -36,14 +35,6 @@ public class OpenAIService : IOpenAIService
             Always recommend that the user consults a lawyer.
             """";
         completionOptions.Messages.Add(new ChatMessage(ChatRole.System, systemPrompt));
-    }
-    public async Task<string> Chat(string message)
-    {
-        
-        completionOptions.Messages.Add(new ChatMessage(ChatRole.User, message));
-        ChatCompletions response = await openAIClient.GetChatCompletionsAsync(completionOptions);
-        ChatMessage assistantResponse = response.Choices[0].Message;
-        return assistantResponse.Content;
     }
 
     public async Task<string> Chat(List<Message> messages, string question)
