@@ -1,0 +1,93 @@
+﻿@page "/"
+@inject IOpenAIService ChatService
+
+<PageTitle>Namibian Legal Assistant</PageTitle>
+
+<h1>Namibian Legal Assistant</h1>
+
+Welcome to your Namibian Legal Assistant.
+
+<div class="card" style="margin-bottom: 20px;">
+    <div class="card-body">
+        <h2>Ask a question</h2>
+        <div class="row">
+            <div class="col-md-6">             
+                    
+                @if (messages.Count > 0)
+                {
+                    <div class="card mt-4">
+                        @if (isLoading)
+                        {
+                            <div class="card-body">
+                                <p style="font-style: italic;">Loading...</p>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="card-body">
+                                <h2>Messages</h2>
+                                <ul style="list-style-type: none; padding: 0;">
+                                    @foreach (var message in messages)
+                                    {
+                                        <li style="margin-bottom: 10px;">
+                                            <span style="font-weight: bold;">@message.Role:</span> @message.Content
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                            <button class="btn btn-warning" @onclick="Clear">Clear</button>
+                        }
+
+                    </div>
+                }
+
+                 <textarea class="form-control mt-4" @bind="@question"
+                    style="padding: 5px; width: 300px; border: 1px solid #ccc;"></textarea>
+                <button class="btn btn-priamry mt-4" @onclick="AskQuestion"
+                    style="padding: 5px 10px; background-color: #007bff; color: #fff; border: none; cursor: pointer;"
+                    disabled="@isLoading">Ask</button>
+            </div>
+            <div class="col-md-6">
+
+                <p>Ask a question about Namibian law and the assistant will try to answer it.</p>
+                <p>For example, you can ask:</p>
+                <ul>
+                    <li>What is the age of majority in Namibia?</li>
+                    <li>What is the age of criminal responsibility in Namibia?</li>
+                    <li>What is the age of marriage in Namibia?</li>
+                </ul>
+                <p>Or you can ask a question about a specific law:</p>
+            </div>
+        </div>
+        <br />
+
+    </div>
+</div>
+
+
+
+@code {
+    private string question;
+    private string answer;
+    private bool isLoading;
+
+    private List<Data.Message> messages = new List<Data.Message>();
+
+    private async Task AskQuestion()
+    {
+        // Call the AI chatbot service to get the answer
+        isLoading = true;
+        answer = await ChatService.Chat(messages, question);
+        messages.Add(new Data.Message("user", question));
+        messages.Add(new Data.Message("assistant", answer));
+
+        question = string.Empty;
+        isLoading = false;
+
+    }
+
+    private async Task Clear()
+    {
+        messages.Clear();
+    }
+}
